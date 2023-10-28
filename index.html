@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Upload page</title>
+</head>
+<body>
+  <img id="preview" src="https://placehold.jp/x150.png">
+  <div class="inputBtn">
+    <form enctype="multipart/form-data">
+      <p><input type="file" name="upfile" id="upfile" accept="image/*" onchange="previewFile(this);"></p>
+      <p><input type="button" value="AI判定" onclick="uploadFile();"></p>
+    </form>
+  </div>
+  <div id="result"></div>
+  <script>
+    function previewFile(input) {
+      var fileData = new FileReader();
+      fileData.onload = function() {
+        document.getElementById('preview').src = fileData.result;
+      };
+      fileData.readAsDataURL(input.files[0]);
+    }
+
+    function uploadFile() {
+      var fileInput = document.getElementById('upfile');
+      var file = fileInput.files[0];
+      console.log(file)
+
+      if (file) {
+        let simpleData = {filename: file.name};
+        simpleDataJSON = JSON.stringify(simpleData);
+        console.log(simpleDataJSON)
+
+        // APIサーバへのリクエストを作成
+        var apiUrl = 'http://127.0.0.1:5000/detect';
+
+        fetch(apiUrl, {
+          method: 'POST',
+          body: simpleDataJSON,
+          headers: {
+           'Content-Type': 'application/json' // ここでContent-Typeを設定
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // APIからの応答データを表示
+            var resultElement = document.getElementById('result');
+            resultElement.innerHTML = 'APIからの応答: ' + JSON.stringify(data);
+        })
+        .catch(error => {
+          console.error('API呼び出しエラー:', error);
+        });
+      } else {
+        alert('ファイルを選択してください。');
+      }
+    }
+  </script>
+</body>
+</html>
