@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Upload page</title>
+</head>
+<body>
+  <div class="image-container">
+    <img id="preview" src="https://placehold.jp/x150.png">
+    <img id="resultImage" src="https://placehold.jp/x150.png" style="display: none;">
+  </div>
+  <div class="inputBtn">
+    <form action="http://localhost:5000/upload" method="POST" enctype="multipart/form-data" id="uploadForm">
+      <p><input type="file" name="file" id="upfile" accept="image/*" onchange="previewFile(this);"></p>
+      <input type="submit" value="AI判定">
+    </form>
+  </div>
+  <script>
+    // 画像をブラウザ上にアップロードし保持する
+    function previewFile(input) {
+      var fileData = new FileReader();
+      fileData.onload = function() {
+        document.getElementById('preview').src = fileData.result;
+      };
+      fileData.readAsDataURL(input.files[0]);
+    }
+
+    // フォームの送信後、APIからのレスポンスを表示
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // デフォルトのフォーム送信を停止
+
+      // APIにフォームを送信し、結果を取得
+      var formData = new FormData(this);
+      fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.blob())
+      .then(blob => {
+        // 判定結果の画像を表示
+        var resultImage = document.getElementById('resultImage');
+        resultImage.src = URL.createObjectURL(blob);
+        resultImage.style.display = 'block'; // 画像を表示
+
+        // もし必要であれば、元のプレビュー画像を非表示にする
+        //document.getElementById('preview').style.display = 'none';
+      })
+      .catch(error => {
+        console.error('APIリクエストエラー:', error);
+      });
+    });
+  </script>
+</body>
+</html>
