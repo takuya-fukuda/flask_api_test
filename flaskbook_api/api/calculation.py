@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import cv2
 import torch
-from flask import current_app, jsonify
+from flask import current_app, jsonify, send_file
 
 from .postprocess import draw_lines, draw_texts, make_color, make_line
 from .preparation import load_image
@@ -57,4 +57,7 @@ def detection(request):
 
     # 検知後の画像ファイルを保存
     cv2.imwrite(dir_image, cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR))
-    return jsonify(dict_results), 201
+    
+    #returnを今回の目的に修正
+    #return jsonify(dict_results), 201
+    return send_file(dir_image, mimetype='image/jpeg')
