@@ -1,10 +1,13 @@
 # flask_api_test
 javascript⇒flaskAPI  
   
+■更新内容  
+Reactでフロントエンドを構築し、APIのURLを隠せるようにしました。  
+  
 ■仕様について  
 index_v3.htmlをブラウザで開く  
 画像をアップロードし、AI判定ボタンを押すと、判定画像（BBOX付）が返ってくる  
-  
+
 ■APIについて  
 PythonAPIの代表としてFlask,Djangoの両方で実装できるように記載  
   
