@@ -2,7 +2,7 @@
 javascript⇒flaskAPI  
   
 ■更新内容  
-Reactでフロントエンドを構築し、APIのURLを隠せるようにしました。  
+Reactでフロントエンドを構築してみました  
   
 ■仕様について  
 index_v3.htmlをブラウザで開く  
